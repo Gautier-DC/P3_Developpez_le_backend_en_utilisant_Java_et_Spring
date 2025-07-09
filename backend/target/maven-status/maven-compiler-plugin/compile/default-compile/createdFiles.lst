@@ -1,4 +1,7 @@
-com/openclassrooms/chatop/entity/User.class
-com/openclassrooms/chatop/ChatopApplication.class
+com/openclassrooms/chatop/repository/UserRepository.class
+com/openclassrooms/chatop/repository/MessageRepository.class
 com/openclassrooms/chatop/entity/Rental.class
+com/openclassrooms/chatop/entity/User.class
+com/openclassrooms/chatop/repository/RentalRepository.class
+com/openclassrooms/chatop/ChatopApplication.class
 com/openclassrooms/chatop/entity/Message.class
