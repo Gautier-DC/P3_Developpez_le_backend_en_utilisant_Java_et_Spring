@@ -8,6 +8,7 @@ public class ChatopApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ChatopApplication.class, args);
+		System.out.println("Chatop Application is running!");
 	}
 
 }
