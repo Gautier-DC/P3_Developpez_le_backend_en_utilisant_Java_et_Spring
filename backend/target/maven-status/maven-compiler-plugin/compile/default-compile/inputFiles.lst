@@ -1,7 +1,0 @@
-/Users/gautier/dev_learning/Developpez-le-back-end-en-utilisant-Java-et-Spring/backend/src/main/java/com/openclassrooms/chatop/ChatopApplication.java
-/Users/gautier/dev_learning/Developpez-le-back-end-en-utilisant-Java-et-Spring/backend/src/main/java/com/openclassrooms/chatop/entity/Message.java
-/Users/gautier/dev_learning/Developpez-le-back-end-en-utilisant-Java-et-Spring/backend/src/main/java/com/openclassrooms/chatop/entity/Rental.java
-/Users/gautier/dev_learning/Developpez-le-back-end-en-utilisant-Java-et-Spring/backend/src/main/java/com/openclassrooms/chatop/entity/User.java
-/Users/gautier/dev_learning/Developpez-le-back-end-en-utilisant-Java-et-Spring/backend/src/main/java/com/openclassrooms/chatop/repository/MessageRepository.java
-/Users/gautier/dev_learning/Developpez-le-back-end-en-utilisant-Java-et-Spring/backend/src/main/java/com/openclassrooms/chatop/repository/RentalRepository.java
-/Users/gautier/dev_learning/Developpez-le-back-end-en-utilisant-Java-et-Spring/backend/src/main/java/com/openclassrooms/chatop/repository/UserRepository.java
