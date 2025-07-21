@@ -8,7 +8,7 @@
             </button>
         </mat-card-header>
         <div class="items mt2" fxLayout="row" fxLayout.lt-md="column">
-            <mat-card class="item" *ngFor="let rental of (rentals$ | async)?.rentals" fxFlex>
+            <mat-card class="item" *ngFor="let rental of (rentals$ | async)" fxFlex>
                 <mat-card-header>
                     <mat-card-title>{{ rental.name }}</mat-card-title>
                     <mat-card-subtitle>

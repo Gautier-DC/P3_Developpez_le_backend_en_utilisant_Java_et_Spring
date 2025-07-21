@@ -26,9 +26,9 @@
                     <input matInput type="number" formControlName="price">
                     <mat-icon matSuffix>attach_money</mat-icon>
                 </mat-form-field>
-                <mat-form-field appearance="outline" *ngIf="!this.onUpdate">
-                    <mat-label>Picture</mat-label>
-                    <ngx-mat-file-input placeholder="Select picture" formControlName="picture"></ngx-mat-file-input>
+                <mat-form-field appearance="outline">
+                    <mat-label>{{ this.onUpdate ? 'Update Picture (optional)' : 'Picture' }}</mat-label>
+                    <ngx-mat-file-input [placeholder]="this.onUpdate ? 'Select new picture (optional)' : 'Select picture'" formControlName="picture"></ngx-mat-file-input>
                     <mat-icon matSuffix>folder</mat-icon>
                 </mat-form-field>
                 <mat-form-field appearance="outline" fxFlex>

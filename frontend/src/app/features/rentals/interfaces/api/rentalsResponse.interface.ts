@@ -1,5 +1,3 @@
 import { Rental } from "../rental.interface";
 
-export interface RentalsResponse {
-    rentals: Rental[];
-}
+export type RentalsResponse = Rental[];
