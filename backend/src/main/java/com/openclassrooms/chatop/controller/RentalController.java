@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,8 +23,6 @@ import com.openclassrooms.chatop.dto.request.RentalRequest;
 import com.openclassrooms.chatop.dto.response.RentalResponse;
 import com.openclassrooms.chatop.entity.Rental;
 import com.openclassrooms.chatop.service.RentalService;
-
-import jakarta.validation.Valid;
 
 /**
  * Rental controller handling CRUD operations for rental properties
