@@ -143,9 +143,6 @@ public class SecurityConfig {
                 // Swagger/OpenAPI endpoints (if you add them later)
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 
-                // Health check endpoint
-                .requestMatchers("/actuator/health").permitAll()
-                
                 // Static resources for images (adjust path as needed)
                 .requestMatchers("/images/**").permitAll()
                 

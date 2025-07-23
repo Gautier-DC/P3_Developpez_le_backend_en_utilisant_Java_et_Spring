@@ -13,6 +13,7 @@ import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { MeComponent } from './components/me/me.component';
 import { MatCardModule } from '@angular/material/card';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { MessagesComponent } from './components/messages/messages.component';
 
 const materialModule = [
   MatButtonModule,
@@ -25,7 +26,8 @@ const materialModule = [
   declarations: [
     AppComponent,
     NotFoundComponent,
-    MeComponent
+    MeComponent,
+    MessagesComponent
   ],
   imports: [
     BrowserModule,

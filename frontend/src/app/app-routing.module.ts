@@ -4,6 +4,7 @@ import { MeComponent } from './components/me/me.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { AuthGuard } from './guards/auth.guard';
 import { UnauthGuard } from './guards/unauth.guard';
+import { MessagesComponent } from './components/messages/messages.component';
 
 const routes: Routes = [
   {
@@ -20,6 +21,11 @@ const routes: Routes = [
     path: 'me',
     canActivate: [AuthGuard], 
     component: MeComponent
+  },
+  {
+    path: 'messages',
+    component: MessagesComponent,
+    canActivate: [AuthGuard]
   },
   { path: '404', component: NotFoundComponent },
   { path: '**', redirectTo: '404' }

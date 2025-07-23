@@ -4,6 +4,7 @@
     <div *ngIf="$isLogged() | async; else notLogged">
       <span routerLink="rentals" class="link">Rentals</span>
       <span routerLink="me" class="link">Account</span>
+      <span routerLink="messages" class="link">Messages</span>
       <span (click)="logout()" class="link">Logout</span>
     </div>
     <ng-template #notLogged>
