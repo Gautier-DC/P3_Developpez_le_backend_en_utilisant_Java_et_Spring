@@ -47,8 +47,8 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Rental> rentals;
     
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Message> messages;
+    // @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    // private List<Message> sentMessages;
 
     // Constructors
     public User() {
@@ -131,13 +131,13 @@ public class User implements UserDetails {
         this.rentals = rentals;
     }
     
-    public List<Message> getMessages() {
-        return messages;
-    }
+    // public List<Message> getMessages() {
+    //     return sentMessages;
+    // }
     
-    public void setMessages(List<Message> messages) {
-        this.messages = messages;
-    }
+    // public void setMessages(List<Message> messages) {
+    //     this.sentMessages = messages;
+    // }
 
     //UserDetails for SpringSecurity
 
