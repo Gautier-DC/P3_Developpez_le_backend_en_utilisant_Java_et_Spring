@@ -21,7 +21,7 @@ public class MessageRequest {
     private Long userId;
 
     @NotBlank(message = "Message content is required")
-    @Size(min = 10, max = 2000, message = "Message must be between 10 and 2000 characters")
+    @Size(min = 3, max = 2000, message = "Message must be between 3 and 2000 characters")
     private String message;
 
     // Default constructor
