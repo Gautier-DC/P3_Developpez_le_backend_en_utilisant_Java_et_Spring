@@ -51,7 +51,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                   HttpServletResponse response, 
                                   FilterChain filterChain) throws ServletException, IOException {
         
-        try {
+        String requestPath = request.getServletPath();
+    logger.info("🔍 JWT Filter processing: {}", requestPath);
+        
+                                    try {
             // Extract JWT token from request
             String jwt = getJwtFromRequest(request);
             
@@ -122,7 +125,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                path.startsWith("/api/auth/login") ||
                path.startsWith("/swagger-ui/") ||
                path.startsWith("/v3/api-docs/") ||
-               path.startsWith("/actuator/health") ||
                path.startsWith("/images/");
     }
 }

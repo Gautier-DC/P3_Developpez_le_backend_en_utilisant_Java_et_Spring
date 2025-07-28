@@ -7,6 +7,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
+
+import com.openclassrooms.chatop.dto.response.ErrorResponse;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,6 +36,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/upload")
 @CrossOrigin(origins = "*", maxAge = 3600)
+@Tag(name = "File Upload", description = "File upload management endpoints")
 public class FileUploadController {
 
     private static final Logger logger = LoggerFactory.getLogger(FileUploadController.class);
@@ -39,6 +52,103 @@ public class FileUploadController {
      * Returns the URL of the uploaded image
      */
     @PostMapping("/image")
+    @Operation(
+        summary = "Upload an image file",
+        description = "Upload an image file for rental properties. Supports JPEG, PNG, GIF, and WebP formats.",
+        tags = {"File Upload"},
+        security = @SecurityRequirement(name = "JWT")
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Image uploaded successfully",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(
+                    name = "Upload Success",
+                    value = """
+                        {
+                            "url": "http://localhost:3001/images/abc123-def456.jpg",
+                            "filename": "abc123-def456.jpg",
+                            "originalName": "my-apartment.jpg"
+                        }
+                        """
+                )
+            )
+        ),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid file or file type not supported",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ErrorResponse.class),
+                examples = @ExampleObject(
+                    name = "Invalid File Type",
+                    value = """
+                        {
+                            "message": "Only image files are allowed (JPEG, PNG, GIF, WebP)",
+                            "code": "ERROR_001",
+                            "timestamp": "2025-01-15T10:30:00Z"
+                        }
+                        """
+                )
+            )
+        ),
+        @ApiResponse(
+            responseCode = "401",
+            description = "Unauthorized - Invalid or missing JWT token",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ErrorResponse.class),
+                examples = @ExampleObject(
+                    name = "Unauthorized",
+                    value = """
+                        {
+                            "message": "Unauthorized - Invalid token",
+                            "code": "ERROR_001",
+                            "timestamp": "2025-01-15T10:30:00Z"
+                        }
+                        """
+                )
+            )
+        ),
+        @ApiResponse(
+            responseCode = "413",
+            description = "File too large",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ErrorResponse.class),
+                examples = @ExampleObject(
+                    name = "File Too Large",
+                    value = """
+                        {
+                            "message": "File size exceeds maximum allowed limit",
+                            "code": "ERROR_001",
+                            "timestamp": "2025-01-15T10:30:00Z"
+                        }
+                        """
+                )
+            )
+        ),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Internal server error",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ErrorResponse.class),
+                examples = @ExampleObject(
+                    name = "Server Error",
+                    value = """
+                        {
+                            "message": "Failed to upload image",
+                            "code": "ERROR_001",
+                            "timestamp": "2025-01-15T10:30:00Z"
+                        }
+                        """
+                )
+            )
+        )
+    })
     public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("image") MultipartFile file) {
         logger.info("Image upload request received: {}", file.getOriginalFilename());
 
@@ -46,15 +156,14 @@ public class FileUploadController {
             // Validate file
             if (file.isEmpty()) {
                 logger.warn("Empty file received");
-                return ResponseEntity.badRequest().build();
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "File cannot be empty");
             }
 
             // Validate file type
             if (!isImageFile(file)) {
                 logger.warn("Invalid file type: {}", file.getContentType());
-                Map<String, String> error = new HashMap<>();
-                error.put("error", "Only image files are allowed (JPEG, PNG, GIF)");
-                return ResponseEntity.badRequest().body(error);
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, 
+                    "Only image files are allowed (JPEG, PNG, GIF, WebP)");
             }
 
             // Generate unique filename
@@ -86,11 +195,14 @@ public class FileUploadController {
 
             return ResponseEntity.ok(response);
 
+        } catch (ResponseStatusException e) {
+            throw e; // Re-throw ResponseStatusException as-is
         } catch (IOException e) {
             logger.error("Error uploading image: {}", e.getMessage(), e);
-            Map<String, String> error = new HashMap<>();
-            error.put("error", "Failed to upload image");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to upload image");
+        } catch (Exception e) {
+            logger.error("Unexpected error during image upload: {}", e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
         }
     }
 

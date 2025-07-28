@@ -5,15 +5,17 @@ import { MessageRequest } from '../interfaces/api/messageRequest.interface';
 import { MessageResponse } from '../interfaces/api/messageResponse.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MessagesService {
-
   private pathService = 'api/messages';
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {}
 
   public send(messageRequest: MessageRequest): Observable<MessageResponse> {
-    return this.httpClient.post<MessageResponse>(this.pathService, messageRequest);
-  } 
+    return this.httpClient.post<MessageResponse>(
+      this.pathService,
+      messageRequest
+    );
   }
+}

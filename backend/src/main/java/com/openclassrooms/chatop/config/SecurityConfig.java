@@ -139,13 +139,19 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Public endpoints - no authentication required
                 .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
-                
-                // Swagger/OpenAPI endpoints (if you add them later)
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                
-                // Static resources for images (adjust path as needed)
+
+                // Public image access
                 .requestMatchers("/images/**").permitAll()
                 
+                // Swagger/OpenAPI endpoints
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                .requestMatchers("/swagger-ui/**").permitAll()
+                .requestMatchers("/swagger-ui.html").permitAll()
+                .requestMatchers("/swagger-ui/index.html").permitAll()
+                .requestMatchers("/v3/api-docs/**").permitAll()
+                .requestMatchers("/swagger-resources/**").permitAll()
+                .requestMatchers("/webjars/**").permitAll()
+
                 // All other requests require authentication
                 .anyRequest().authenticated()
             )

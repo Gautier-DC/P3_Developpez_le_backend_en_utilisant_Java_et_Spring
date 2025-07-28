@@ -3,7 +3,6 @@ package com.openclassrooms.chatop.entity;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -42,13 +41,6 @@ public class User implements UserDetails {
     
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    // Relationships
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Rental> rentals;
-    
-    // @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    // private List<Message> sentMessages;
 
     // Constructors
     public User() {
@@ -122,22 +114,6 @@ public class User implements UserDetails {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
-    
-    public List<Rental> getRentals() {
-        return rentals;
-    }
-    
-    public void setRentals(List<Rental> rentals) {
-        this.rentals = rentals;
-    }
-    
-    // public List<Message> getMessages() {
-    //     return sentMessages;
-    // }
-    
-    // public void setMessages(List<Message> messages) {
-    //     this.sentMessages = messages;
-    // }
 
     //UserDetails for SpringSecurity
 

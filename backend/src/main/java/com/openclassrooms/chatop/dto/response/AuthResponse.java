@@ -19,13 +19,11 @@ public class AuthResponse {
     // Constructor with parameters
     public AuthResponse(String token, UserResponse user) {
         this.token = token;
-        this.user = user;
     }
     
-    // Constructor with token and User entity
+    // Constructor with token
     public AuthResponse(String token, User user) {
         this.token = token;
-        this.user = new UserResponse(user);
     }
     
     // Static factory methods for different scenarios
@@ -46,19 +44,10 @@ public class AuthResponse {
         this.token = token;
     }
     
-    public UserResponse getUser() {
-        return user;
-    }
-    
-    public void setUser(UserResponse user) {
-        this.user = user;
-    }
-    
     @Override
     public String toString() {
         return "AuthResponse{" +
                 "token='[PROTECTED]'" +
-                ", user=" + user +
                 '}';
     }
 }

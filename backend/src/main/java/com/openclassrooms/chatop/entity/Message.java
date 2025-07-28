@@ -16,19 +16,6 @@ public class Message {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "message", nullable = false, length = 2000)
-    private String message;
-
-    @Column(name = "is_read", nullable = false)
-    private Boolean isRead = false;
-
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
-
-    // Relationships
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -36,6 +23,16 @@ public class Message {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rental_id", nullable = false)
     private Rental rental;
+
+    @Column(name = "message", nullable = false, length = 2000)
+    private String message;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+
 
     // Constructors
     public Message() {
@@ -45,7 +42,6 @@ public class Message {
         this.message = message;
         this.user = user;
         this.rental = rental;
-        this.isRead = false;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
@@ -58,9 +54,6 @@ public class Message {
         }
         if (updatedAt == null) {
             updatedAt = LocalDateTime.now();
-        }
-        if (isRead == null) {
-            isRead = false;
         }
     }
 
@@ -86,17 +79,6 @@ public class Message {
         this.message = message;
     }
 
-    public Boolean isRead() {
-        return isRead;
-    }
-
-    public Boolean getIsRead() {
-        return isRead;
-    }
-
-    public void setRead(Boolean read) {
-        this.isRead = read;
-    }
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -159,22 +141,6 @@ public class Message {
         return isFromUser(user) || isForUser(user);
     }
 
-    /**
-     * Mark message as read
-     */
-    public void markAsRead() {
-        this.isRead = true;
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    /**
-     * Mark message as unread
-     */
-    public void markAsUnread() {
-        this.isRead = false;
-        this.updatedAt = LocalDateTime.now();
-    }
-
     // equals and hashCode
     @Override
     public boolean equals(Object o) {
@@ -194,7 +160,6 @@ public class Message {
         return "Message{" +
                 "id=" + id +
                 ", message='" + (message != null ? message.substring(0, Math.min(50, message.length())) + "..." : null) + '\'' +
-                ", isRead=" + isRead +
                 ", userId=" + (user != null ? user.getId() : null) +
                 ", rentalId=" + (rental != null ? rental.getId() : null) +
                 ", createdAt=" + createdAt +

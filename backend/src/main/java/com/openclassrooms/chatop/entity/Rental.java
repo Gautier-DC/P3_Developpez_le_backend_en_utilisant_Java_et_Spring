@@ -54,9 +54,6 @@ public class Rental {
     @NotNull(message = "Owner is mandatory")
     private User owner;
     
-    @OneToMany(mappedBy = "rental", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Message> messages;
-    
     // Constructeurs
     public Rental() {
     }
@@ -152,14 +149,6 @@ public class Rental {
     
     public void setOwner(User owner) {
         this.owner = owner;
-    }
-    
-    public List<Message> getMessages() {
-        return messages;
-    }
-    
-    public void setMessages(List<Message> messages) {
-        this.messages = messages;
     }
     
     @Override

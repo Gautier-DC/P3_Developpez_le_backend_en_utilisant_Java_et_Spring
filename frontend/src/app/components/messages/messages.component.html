@@ -3,9 +3,6 @@
   <div class="messages-header">
     <h2>My Messages</h2>
     <div class="header-actions">
-      <span class="unread-badge" *ngIf="unreadCount > 0">
-        {{ unreadCount }} unread
-      </span>
       <button mat-icon-button (click)="refreshMessages()" [disabled]="loading">
         <mat-icon>refresh</mat-icon>
       </button>
@@ -27,7 +24,10 @@
   </div>
 
   <!-- Empty State -->
-  <div class="empty-container" *ngIf="!loading && !error && messages.length === 0">
+  <div
+    class="empty-container"
+    *ngIf="!loading && !error && messages.length === 0"
+  >
     <mat-icon>mail_outline</mat-icon>
     <h3>No messages yet</h3>
     <p>Your conversations will appear here</p>
@@ -35,35 +35,20 @@
 
   <!-- Messages List -->
   <div class="messages-list" *ngIf="!loading && !error && messages.length > 0">
-    <mat-card 
-      class="message-card" 
+    <mat-card
+      class="message-card"
       *ngFor="let message of messages; trackBy: trackByMessageId"
       [ngClass]="{
         'message-sent': getMessageType(message) === 'sent',
-        'message-received': getMessageType(message) === 'received',
-        'message-unread': !message.is_read && isRecipient(message)
+        'message-received': getMessageType(message) === 'received'
       }"
-      (click)="markAsRead(message)">
-      
+    >
       <!-- Message Header -->
       <div class="message-header">
-        <div class="message-info">
-          <span class="contact-name">
-            {{ getContactName(message) }}
-          </span>
-          <span class="rental-name">
-            about "{{ message.rental_name }}"
-          </span>
-        </div>
         <div class="message-meta">
           <span class="message-date">
             {{ formatDate(message.created_at) }}
           </span>
-          <mat-icon 
-            class="read-status" 
-            *ngIf="!message.is_read && isRecipient(message)">
-            fiber_manual_record
-          </mat-icon>
         </div>
       </div>
 
@@ -75,11 +60,10 @@
       <!-- Message Footer -->
       <div class="message-footer">
         <span class="message-type">
-          <mat-icon>{{ getMessageType(message) === 'sent' ? 'send' : 'inbox' }}</mat-icon>
-          {{ getMessageType(message) === 'sent' ? 'Sent' : 'Received' }}
-        </span>
-        <span class="read-status-text" *ngIf="getMessageType(message) === 'received'">
-          {{ message.is_read ? 'Read' : 'Unread' }}
+          <mat-icon>{{
+            getMessageType(message) === "sent" ? "send" : "inbox"
+          }}</mat-icon>
+          {{ getMessageType(message) === "sent" ? "Sent" : "Received" }}
         </span>
       </div>
     </mat-card>

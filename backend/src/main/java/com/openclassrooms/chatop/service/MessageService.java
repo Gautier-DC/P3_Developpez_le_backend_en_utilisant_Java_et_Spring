@@ -10,7 +10,6 @@ import com.openclassrooms.chatop.repository.RentalRepository;
 import com.openclassrooms.chatop.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -95,7 +94,6 @@ public class MessageService {
             message.setMessage(request.getMessage());
             message.setUser(user);
             message.setRental(rental);
-            message.setRead(false); // New messages are unread
             message.setCreatedAt(LocalDateTime.now());
             message.setUpdatedAt(LocalDateTime.now());
             
@@ -236,97 +234,7 @@ public class MessageService {
         }
     }
 
-    /**
-     * Mark message as read
-     * Only the rental owner (recipient) can mark messages as read
-     */
-    public void markAsRead(Long messageId, String userEmail) {
-        logger.info("Marking message {} as read by user: {}", messageId, userEmail);
-        
-        try {
-            // Find message
-            Message message = messageRepository.findById(messageId)
-                    .orElseThrow(() -> {
-                        logger.error("Message not found: {}", messageId);
-                        return new RuntimeException("Message not found with ID: " + messageId);
-                    });
-            
-            // Check authorization - only rental owner can mark as read
-            if (!message.getRental().getOwner().getEmail().equals(userEmail)) {
-                logger.warn("User {} not authorized to mark message {} as read", userEmail, messageId);
-                throw new RuntimeException("User not authorized to mark this message as read");
-            }
-            
-            // Mark as read if not already
-            if (!message.isRead()) {
-                message.setRead(true);
-                message.setUpdatedAt(LocalDateTime.now());
-                messageRepository.save(message);
-                
-                logger.info("Message {} marked as read by user: {}", messageId, userEmail);
-            } else {
-                logger.debug("Message {} was already marked as read", messageId);
-            }
-            
-        } catch (RuntimeException e) {
-            throw e; // Re-throw business exceptions
-        } catch (Exception e) {
-            logger.error("Error marking message as read: {}", messageId, e);
-            throw new RuntimeException("Failed to mark message as read");
-        }
-    }
 
-    /**
-     * Get count of unread messages for a user
-     * Only counts messages where user is the rental owner (recipient)
-     */
-    public long getUnreadMessageCount(String userEmail) {
-        logger.debug("Getting unread message count for user: {}", userEmail);
-        
-        try {
-            // Find user
-            User user = userRepository.findByEmail(userEmail)
-                    .orElseThrow(() -> {
-                        logger.error("User not found: {}", userEmail);
-                        return new RuntimeException("User not found: " + userEmail);
-                    });
-            
-            // Count unread messages where user is rental owner
-            long count = messageRepository.countUnreadMessagesForOwner(user);
-            
-            logger.debug("User {} has {} unread messages", userEmail, count);
-            return count;
-            
-        } catch (RuntimeException e) {
-            throw e; // Re-throw business exceptions
-        } catch (Exception e) {
-            logger.error("Error getting unread message count for user: {}", userEmail, e);
-            return 0; // Return 0 on error to avoid breaking UI
-        }
-    }
-
-    /**
-     * Get message statistics for a user
-     * Useful for dashboard or analytics
-     */
-    public MessageStatistics getUserMessageStatistics(String userEmail) {
-        logger.info("Getting message statistics for user: {}", userEmail);
-        
-        try {
-            User user = userRepository.findByEmail(userEmail)
-                    .orElseThrow(() -> new RuntimeException("User not found: " + userEmail));
-            
-            long totalSent = messageRepository.countByUser(user);
-            long totalReceived = messageRepository.countByRentalOwner(user);
-            long unreadReceived = messageRepository.countUnreadMessagesForOwner(user);
-            
-            return new MessageStatistics(totalSent, totalReceived, unreadReceived);
-            
-        } catch (Exception e) {
-            logger.error("Error calculating message statistics for user: {}", userEmail, e);
-            throw new RuntimeException("Failed to calculate message statistics");
-        }
-    }
 
     /**
      * Validate message request data

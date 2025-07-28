@@ -63,7 +63,6 @@ public class MessageResponse {
         this.recipientId = messageEntity.getRental().getOwner().getId();
         this.recipientName = messageEntity.getRental().getOwner().getName();
         this.recipientEmail = messageEntity.getRental().getOwner().getEmail();
-        this.isRead = messageEntity.isRead();
         this.createdAt = messageEntity.getCreatedAt();
         this.updatedAt = messageEntity.getUpdatedAt();
     }
@@ -71,8 +70,7 @@ public class MessageResponse {
     // Constructor with parameters
     public MessageResponse(Long id, String message, Long rentalId, String rentalName,
                           Long userId, String userName, String userEmail,
-                          Long recipientId, String recipientName, String recipientEmail,
-                          Boolean isRead, LocalDateTime createdAt, LocalDateTime updatedAt) {
+                          Long recipientId, String recipientName, String recipientEmail, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.message = message;
         this.rentalId = rentalId;
@@ -83,7 +81,6 @@ public class MessageResponse {
         this.recipientId = recipientId;
         this.recipientName = recipientName;
         this.recipientEmail = recipientEmail;
-        this.isRead = isRead;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -209,7 +206,6 @@ public class MessageResponse {
                 ", userName='" + userName + '\'' +
                 ", recipientId=" + recipientId +
                 ", recipientName='" + recipientName + '\'' +
-                ", isRead=" + isRead +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';

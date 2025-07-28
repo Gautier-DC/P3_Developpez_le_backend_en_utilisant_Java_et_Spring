@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 public class UserResponse {
     
     private Long id;
-    private String email;
     private String name;
+    private String email;
     @JsonProperty("created_at")
     private LocalDateTime createdAt;
     @JsonProperty("updated_at")
@@ -23,8 +23,8 @@ public class UserResponse {
     
     public UserResponse(Long id, String email, String name, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
-        this.email = email;
         this.name = name;
+        this.email = email;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -32,8 +32,8 @@ public class UserResponse {
     // Constructor from User entity
     public UserResponse(User user) {
         this.id = user.getId();
-        this.email = user.getEmail();
         this.name = user.getName();
+        this.email = user.getEmail();
         this.createdAt = user.getCreatedAt();
         this.updatedAt = user.getUpdatedAt();
     }
@@ -88,8 +88,8 @@ public class UserResponse {
     public String toString() {
         return "UserResponse{" +
                 "id=" + id +
-                ", email='" + email + '\'' +
                 ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';

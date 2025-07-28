@@ -13,16 +13,9 @@ export interface MessageRequest {
 
 export interface MessageResponse {
   id: number;
-  message: string;
+  user_id: number;
   rental_id: number;
-  rental_name: string;
-  sender_id: number;
-  sender_name: string;
-  sender_email: string;
-  recipient_id: number;
-  recipient_name: string;
-  recipient_email: string;
-  is_read: boolean;
+  message: string;
   created_at: string;
   updated_at: string;
 }
@@ -48,8 +41,6 @@ export class MessageService {
    * Send a new message
    */
   public sendMessage(messageData: MessageRequest): Observable<SendMessageResponse> {
-    console.log('📤 Sending message:', messageData);
-    
     return this.httpClient.post<SendMessageResponse>(this.pathService, messageData);
   }
 
@@ -57,8 +48,6 @@ export class MessageService {
    * Get all messages for the current user
    */
   public getMyMessages(): Observable<MessageResponse[]> {
-    console.log('📥 Fetching my messages...');
-    
     return this.httpClient.get<MessageResponse[]>(this.pathService);
   }
 
@@ -66,8 +55,6 @@ export class MessageService {
    * Get messages for a specific rental
    */
   public getMessagesByRental(rentalId: number): Observable<MessageResponse[]> {
-    console.log('📥 Fetching messages for rental:', rentalId);
-    
     return this.httpClient.get<MessageResponse[]>(`${this.pathService}/rental/${rentalId}`);
   }
 
@@ -75,26 +62,7 @@ export class MessageService {
    * Get a specific message by ID
    */
   public getMessageById(messageId: number): Observable<MessageResponse> {
-    console.log('📥 Fetching message:', messageId);
-    
     return this.httpClient.get<MessageResponse>(`${this.pathService}/${messageId}`);
   }
 
-  /**
-   * Mark a message as read
-   */
-  public markAsRead(messageId: number): Observable<{message: string}> {
-    console.log('✅ Marking message as read:', messageId);
-    
-    return this.httpClient.put<{message: string}>(`${this.pathService}/${messageId}/read`, {});
-  }
-
-  /**
-   * Get unread message count
-   */
-  public getUnreadCount(): Observable<UnreadCountResponse> {
-    console.log('🔔 Fetching unread count...');
-    
-    return this.httpClient.get<UnreadCountResponse>(`${this.pathService}/unread/count`);
-  }
 }
