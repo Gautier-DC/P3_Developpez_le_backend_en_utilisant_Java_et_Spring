@@ -9,13 +9,13 @@ import java.time.Instant;
  */
 @Schema(description = "Error response returned when an API operation fails")
 public class ErrorResponse {
-    
+
     @Schema(description = "Human-readable error message", example = "Invalid email or password")
     private String message;
-    
+
     @Schema(description = "Error code for client handling", example = "AUTH_001")
     private String code;
-    
+
     @Schema(description = "Timestamp when the error occurred", example = "2025-01-15T10:30:00Z")
     private String timestamp;
 
@@ -45,7 +45,7 @@ public class ErrorResponse {
     }
 
     // Getters and Setters
-    
+
     public String getMessage() {
         return message;
     }

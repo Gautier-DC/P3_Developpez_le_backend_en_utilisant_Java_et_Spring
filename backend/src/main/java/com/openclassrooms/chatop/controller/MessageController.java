@@ -123,7 +123,7 @@ public class MessageController {
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(name = "Server Error", value = """
                     {
                         "message": "Internal server error",
-                        "code": "ERROR_001",
+                        "code": "SERVER_500",
                         "timestamp": "2025-01-15T10:30:00Z"
                     }
                     """)))

@@ -7,29 +7,36 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 /**
  * DTO for rental creation and update requests
  * Contains validation annotations for data integrity
  */
 public class RentalRequest {
 
+    @Schema(description = "Name of the rental", example = "Cozy Apartment")
     @NotBlank(message = "Rental name is required")
     @Size(min = 2, max = 100, message = "Rental name must be between 2 and 100 characters")
     private String name;
 
+    @Schema(description = "Surface of the rental", example = "150")
     @NotNull(message = "Surface is required")
     @DecimalMin(value = "1.0", message = "Surface must be greater than 0")
     @DecimalMax(value = "10000.0", message = "Surface must be less than 10000 square meters")
     private BigDecimal surface;
 
+    @Schema(description = "Price of the rental", example = "1200.00")
     @NotNull(message = "Price is required")
     @DecimalMin(value = "1.0", message = "Price must be greater than 0")
     @DecimalMax(value = "1000000.0", message = "Price must be less than 1,000,000")
     private BigDecimal price;
 
+    @Schema(description = "Description of the rental", example = "A cozy apartment in the city center with all amenities.")
     @Size(max = 500, message = "Description must be less than 500 characters")
     private String description;
 
+    @Schema(description = "Picture URL of the rental", example = "http://example.com/picture.jpg")
     @Size(max = 255, message = "Picture URL must be less than 255 characters")
     private String picture;
 

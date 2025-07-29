@@ -93,18 +93,17 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         logger.info("Configuring CORS for Angular frontend");
         CorsConfiguration configuration = new CorsConfiguration();
-        
+
         // Allow Angular dev server (adjust port if needed)
         configuration.setAllowedOrigins(List.of(
-            "http://localhost:4200",
-            "http://localhost:3000"
-        ));
-        
+                "http://localhost:4200",
+                "http://localhost:3000"));
+
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L); // Cache preflight for 1 hour
-        
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
@@ -117,50 +116,47 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         logger.info("Configuring security filter chain");
-        
+
         http
-            // Disable CSRF for stateless JWT authentication
-            .csrf(AbstractHttpConfigurer::disable)
-            
-            // Enable CORS
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            
-            // Configure session management to be stateless
-            .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            )
-            
-            // Configure exception handling
-            .exceptionHandling(exception -> exception
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint())
-            )
-            
-            // Configure authorization rules
-            .authorizeHttpRequests(auth -> auth
-                // Public endpoints - no authentication required
-                .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
+                // Disable CSRF for stateless JWT authentication
+                .csrf(AbstractHttpConfigurer::disable)
 
-                // Public image access
-                .requestMatchers("/images/**").permitAll()
-                
-                // Swagger/OpenAPI endpoints
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                .requestMatchers("/swagger-ui/**").permitAll()
-                .requestMatchers("/swagger-ui.html").permitAll()
-                .requestMatchers("/swagger-ui/index.html").permitAll()
-                .requestMatchers("/v3/api-docs/**").permitAll()
-                .requestMatchers("/swagger-resources/**").permitAll()
-                .requestMatchers("/webjars/**").permitAll()
+                // Enable CORS
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-                // All other requests require authentication
-                .anyRequest().authenticated()
-            )
-            
-            // Set authentication provider
-            .authenticationProvider(authenticationProvider(null)) // Will be injected by Spring
-            
-            // Add JWT filter before UsernamePasswordAuthenticationFilter
-            .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                // Configure session management to be stateless
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                // Configure exception handling
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint()))
+
+                // Configure authorization rules
+                .authorizeHttpRequests(auth -> auth
+                        // Public endpoints - no authentication required
+                        .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
+
+                        // Public image access
+                        .requestMatchers("/images/**").permitAll()
+
+                        // Swagger/OpenAPI endpoints
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/swagger-ui.html").permitAll()
+                        .requestMatchers("/swagger-ui/index.html").permitAll()
+                        .requestMatchers("/v3/api-docs/**").permitAll()
+                        .requestMatchers("/swagger-resources/**").permitAll()
+                        .requestMatchers("/webjars/**").permitAll()
+
+                        // All other requests require authentication
+                        .anyRequest().authenticated())
+
+                // Set authentication provider
+                .authenticationProvider(authenticationProvider(null)) // Will be injected by Spring
+
+                // Add JWT filter before UsernamePasswordAuthenticationFilter
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         logger.info("Security filter chain configured successfully");
         return http.build();

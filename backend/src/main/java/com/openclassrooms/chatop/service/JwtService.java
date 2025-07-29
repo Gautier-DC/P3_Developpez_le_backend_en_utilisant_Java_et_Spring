@@ -27,19 +27,19 @@ import java.util.function.Function;
  */
 @Service
 public class JwtService {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(JwtService.class);
-    
+
     @Value("${jwt.secret}")
     private String jwtSecret;
-    
+
     @Value("${jwt.expiration}")
     private Long jwtExpirationMs;
-    
+
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(jwtSecret.getBytes());
     }
-    
+
     /**
      * Generate JWT token for authenticated user
      * 
@@ -54,7 +54,7 @@ public class JwtService {
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
-    
+
     /**
      * Generate JWT token with additional claims
      * 
@@ -65,20 +65,20 @@ public class JwtService {
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
         return createToken(extraClaims, userDetails.getUsername());
     }
-    
+
     /**
      * Create JWT token with claims and subject
      * 
-     * @param claims Token claims
+     * @param claims  Token claims
      * @param subject Token subject (typically email)
      * @return JWT token string
      */
     private String createToken(Map<String, Object> claims, String subject) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationMs);
-        
+
         logger.debug("Creating JWT token for subject: {} with expiry: {}", subject, expiryDate);
-        
+
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
@@ -87,7 +87,7 @@ public class JwtService {
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
-    
+
     /**
      * Extract username (email) from JWT token
      * 
@@ -97,7 +97,7 @@ public class JwtService {
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
-    
+
     /**
      * Get username from JWT token (alias for extractUsername)
      * 
@@ -107,7 +107,7 @@ public class JwtService {
     public String getUsernameFromToken(String token) {
         return extractUsername(token);
     }
-    
+
     /**
      * Extract user ID from JWT token
      * 
@@ -117,7 +117,7 @@ public class JwtService {
     public Long extractUserId(String token) {
         return extractClaim(token, claims -> claims.get("userId", Long.class));
     }
-    
+
     /**
      * Extract expiration date from JWT token
      * 
@@ -127,11 +127,11 @@ public class JwtService {
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
-    
+
     /**
      * Extract specific claim from JWT token
      * 
-     * @param token JWT token
+     * @param token          JWT token
      * @param claimsResolver Function to extract specific claim
      * @return Extracted claim
      */
@@ -139,7 +139,7 @@ public class JwtService {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
-    
+
     /**
      * Extract all claims from JWT token
      * 
@@ -158,7 +158,7 @@ public class JwtService {
             throw new JwtException("Invalid JWT token", e);
         }
     }
-    
+
     /**
      * Check if JWT token is expired
      * 
@@ -169,22 +169,22 @@ public class JwtService {
         try {
             Date expiration = extractExpiration(token);
             boolean expired = expiration.before(new Date());
-            
+
             if (expired) {
                 logger.debug("JWT token is expired. Expiry date: {}", expiration);
             }
-            
+
             return expired;
         } catch (JwtException e) {
             logger.error("Error checking token expiration: {}", e.getMessage());
             return true; // Consider invalid tokens as expired
         }
     }
-    
+
     /**
      * Validate JWT token against user details
      * 
-     * @param token JWT token
+     * @param token       JWT token
      * @param userDetails User details to validate against
      * @return true if token is valid
      */
@@ -192,16 +192,16 @@ public class JwtService {
         try {
             final String username = extractUsername(token);
             boolean isValid = (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
-            
+
             logger.debug("JWT token validation for user {}: {}", username, isValid);
             return isValid;
-            
+
         } catch (JwtException e) {
             logger.error("JWT token validation failed: {}", e.getMessage());
             return false;
         }
     }
-    
+
     /**
      * Validate JWT token (basic validation without user details)
      * 
@@ -212,16 +212,16 @@ public class JwtService {
         try {
             extractAllClaims(token); // This will throw if token is invalid
             boolean isValid = !isTokenExpired(token);
-            
+
             logger.debug("Basic JWT token validation: {}", isValid);
             return isValid;
-            
+
         } catch (JwtException e) {
             logger.error("JWT token validation failed: {}", e.getMessage());
             return false;
         }
     }
-    
+
     /**
      * Get remaining time until token expiration
      * 
@@ -238,7 +238,7 @@ public class JwtService {
             return 0L;
         }
     }
-    
+
     /**
      * Convert Date to LocalDateTime for easier handling
      * 
@@ -251,28 +251,3 @@ public class JwtService {
                 .toLocalDateTime();
     }
 }
-
-/*
- * Usage examples:
- * 
- * 1. Generate token after successful authentication:
- * String token = jwtService.generateToken(authenticatedUser);
- * 
- * 2. Validate token in security filter:
- * if (jwtService.validateToken(token, userDetails)) {
- *     // Token is valid, proceed with authentication
- * }
- * 
- * 3. Extract user information from token:
- * String email = jwtService.extractUsername(token);
- * Long userId = jwtService.extractUserId(token);
- * 
- * 4. Check if token is expired:
- * if (jwtService.isTokenExpired(token)) {
- *     // Token is expired, require re-authentication
- * }
- * 
- * Configuration required in application.properties:
- * jwt.secret=yourSecretKeyForJWTTokenGeneration2024
- * jwt.expiration=86400000  # 24 hours in milliseconds
- */

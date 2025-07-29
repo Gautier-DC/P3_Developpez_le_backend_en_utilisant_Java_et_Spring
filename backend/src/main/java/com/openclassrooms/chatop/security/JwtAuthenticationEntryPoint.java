@@ -26,22 +26,23 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     /**
-     * Called when a user tries to access a secured resource without proper authentication
+     * Called when a user tries to access a secured resource without proper
+     * authentication
      * Returns a JSON error response instead of redirecting to login page
      */
     @Override
-    public void commence(HttpServletRequest request, 
-                        HttpServletResponse response,
-                        AuthenticationException authException) throws IOException, ServletException {
-        
-        logger.warn("Unauthorized access attempt to: {} from IP: {}", 
-                   request.getRequestURI(), 
-                   request.getRemoteAddr());
-        
+    public void commence(HttpServletRequest request,
+            HttpServletResponse response,
+            AuthenticationException authException) throws IOException, ServletException {
+
+        logger.warn("Unauthorized access attempt to: {} from IP: {}",
+                request.getRequestURI(),
+                request.getRemoteAddr());
+
         // Set response properties
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        
+
         // Create error response body
         Map<String, Object> body = new HashMap<>();
         body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
@@ -49,7 +50,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         body.put("message", "Authentication required to access this resource");
         body.put("path", request.getServletPath());
         body.put("timestamp", System.currentTimeMillis());
-        
+
         // Write JSON response
         objectMapper.writeValue(response.getOutputStream(), body);
     }

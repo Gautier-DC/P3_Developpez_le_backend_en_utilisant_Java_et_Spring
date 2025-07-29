@@ -35,7 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtService jwtService;
-    
+
     @Autowired
     private AuthService authService;
 
@@ -47,41 +47,39 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      * Filter method that processes each HTTP request to validate JWT tokens
      */
     @Override
-    protected void doFilterInternal(HttpServletRequest request, 
-                                  HttpServletResponse response, 
-                                  FilterChain filterChain) throws ServletException, IOException {
-        
+    protected void doFilterInternal(HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain) throws ServletException, IOException {
+
         String requestPath = request.getServletPath();
-    logger.info("🔍 JWT Filter processing: {}", requestPath);
-        
-                                    try {
+        logger.info("🔍 JWT Filter processing: {}", requestPath);
+
+        try {
             // Extract JWT token from request
             String jwt = getJwtFromRequest(request);
-            
+
             if (jwt != null && jwtService.validateToken(jwt)) {
                 // Get username from token
                 String username = jwtService.getUsernameFromToken(jwt);
-                
+
                 // Load user details
                 UserDetails userDetails = authService.loadUserByUsername(username);
-                
+
                 // Create authentication token
-                UsernamePasswordAuthenticationToken authentication = 
-                    new UsernamePasswordAuthenticationToken(
-                        userDetails, 
-                        null, 
-                        userDetails.getAuthorities()
-                    );
-                
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities());
+
                 // Set additional details
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                
+
                 // Set authentication in security context
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                
+
                 logger.debug("Successfully authenticated user: {}", username);
             }
-            
+
         } catch (ExpiredJwtException e) {
             logger.warn("JWT token is expired: {}", e.getMessage());
         } catch (UnsupportedJwtException e) {
@@ -93,7 +91,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             logger.error("Cannot set user authentication: {}", e.getMessage());
         }
-        
+
         // Continue with the filter chain
         filterChain.doFilter(request, response);
     }
@@ -104,11 +102,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      */
     private String getJwtFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        
+
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
             return bearerToken.substring(BEARER_PREFIX.length());
         }
-        
+
         return null;
     }
 
@@ -119,12 +117,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getRequestURI();
-        
+
         // Skip JWT validation for public endpoints
-        return path.startsWith("/api/auth/register") || 
-               path.startsWith("/api/auth/login") ||
-               path.startsWith("/swagger-ui/") ||
-               path.startsWith("/v3/api-docs/") ||
-               path.startsWith("/images/");
+        return path.startsWith("/api/auth/register") ||
+                path.startsWith("/api/auth/login") ||
+                path.startsWith("/swagger-ui/") ||
+                path.startsWith("/v3/api-docs/") ||
+                path.startsWith("/images/");
     }
 }

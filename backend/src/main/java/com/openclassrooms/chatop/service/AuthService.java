@@ -30,9 +30,9 @@ public class AuthService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
-    public AuthService(UserRepository userRepository, 
-                      PasswordEncoder passwordEncoder, 
-                      JwtService jwtService) {
+    public AuthService(UserRepository userRepository,
+            PasswordEncoder passwordEncoder,
+            JwtService jwtService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
@@ -77,15 +77,14 @@ public class AuthService implements UserDetailsService {
         logger.debug("Fetching current user info for email: {}", email);
 
         User user = userRepository.findByEmail(email)
-            .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
 
         return new UserResponse(
-            user.getId(),
-            user.getEmail(),
-            user.getName(),
-            user.getCreatedAt(),
-            user.getUpdatedAt()
-        );
+                user.getId(),
+                user.getEmail(),
+                user.getName(),
+                user.getCreatedAt(),
+                user.getUpdatedAt());
     }
 
     /**
@@ -97,7 +96,7 @@ public class AuthService implements UserDetailsService {
         logger.debug("Loading user by email: {}", email);
 
         Optional<User> userOptional = userRepository.findByEmail(email);
-        
+
         if (userOptional.isEmpty()) {
             logger.warn("User not found with email: {}", email);
             throw new UsernameNotFoundException("User not found with email: " + email);
@@ -108,13 +107,27 @@ public class AuthService implements UserDetailsService {
 
         // Return Spring Security UserDetails object
         return org.springframework.security.core.userdetails.User.builder()
-            .username(user.getEmail())
-            .password(user.getPassword())
-            .authorities(new ArrayList<>()) // Empty authorities for now
-            .accountExpired(false)
-            .accountLocked(false)
-            .credentialsExpired(false)
-            .disabled(false)
-            .build();
+                .username(user.getEmail())
+                .password(user.getPassword())
+                .authorities(new ArrayList<>()) // Empty authorities for now
+                .accountExpired(false)
+                .accountLocked(false)
+                .credentialsExpired(false)
+                .disabled(false)
+                .build();
+    }
+
+    public UserResponse getUserById(Long id) {
+        logger.debug("Fetching user info for ID: {}", id);
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + id));
+
+        return new UserResponse(
+                user.getId(),
+                user.getEmail(),
+                user.getName(),
+                user.getCreatedAt(),
+                user.getUpdatedAt());
     }
 }

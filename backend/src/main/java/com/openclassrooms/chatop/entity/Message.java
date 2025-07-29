@@ -33,7 +33,6 @@ public class Message {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-
     // Constructors
     public Message() {
     }
@@ -112,7 +111,7 @@ public class Message {
     }
 
     // Business methods
-    
+
     /**
      * Check if the message is from a specific user
      */
@@ -144,8 +143,10 @@ public class Message {
     // equals and hashCode
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Message)) return false;
+        if (this == o)
+            return true;
+        if (!(o instanceof Message))
+            return false;
         Message message = (Message) o;
         return id != null && id.equals(message.id);
     }
@@ -159,7 +160,8 @@ public class Message {
     public String toString() {
         return "Message{" +
                 "id=" + id +
-                ", message='" + (message != null ? message.substring(0, Math.min(50, message.length())) + "..." : null) + '\'' +
+                ", message='" + (message != null ? message.substring(0, Math.min(50, message.length())) + "..." : null)
+                + '\'' +
                 ", userId=" + (user != null ? user.getId() : null) +
                 ", rentalId=" + (rental != null ? rental.getId() : null) +
                 ", createdAt=" + createdAt +
