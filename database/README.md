@@ -12,6 +12,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'chatop_user'@'localhost';
 FLUSH PRIVILEGES;
 CREATE DATABASE chatop_db;
 USE chatop_db;
+mysql -u root -p < script.sql
 ```
 
 ## Reset database (if needed)
@@ -20,4 +21,5 @@ mysql -u root -p
 DROP DATABASE IF EXISTS chatop_db;
 CREATE DATABASE chatop_db;
 exit;
-mysql -u root -p chatop_db
+mysql -u root -p < script.sql
+mysql -u root -p
