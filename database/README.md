@@ -21,5 +21,5 @@ mysql -u root -p
 DROP DATABASE IF EXISTS chatop_db;
 CREATE DATABASE chatop_db;
 exit;
-mysql -u root -p < script.sql
+mysql -u root -p  chatop_db < script.sql
 mysql -u root -p
