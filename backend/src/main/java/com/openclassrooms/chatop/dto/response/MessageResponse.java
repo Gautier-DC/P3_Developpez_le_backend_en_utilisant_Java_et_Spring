@@ -2,6 +2,9 @@ package com.openclassrooms.chatop.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.openclassrooms.chatop.entity.Message;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.LocalDateTime;
 
 /**
@@ -11,39 +14,29 @@ import java.time.LocalDateTime;
  */
 public class MessageResponse {
 
+    @Schema(description = "Unique message identifier", example = "1")
     private Long id;
+
+    @Schema(description = "Content of the message", example = "Hello, I am interested in this rental.")
     private String message;
 
+    @Schema(description = "Unique rental identifier", example = "1")
     @JsonProperty("rental_id")
     private Long rentalId;
 
+    @Schema(description = "Name of the rental", example = "Cozy Apartment")
     @JsonProperty("rental_name")
     private String rentalName;
 
+    @Schema(description = "Unique user identifier", example = "1")
     @JsonProperty("user_id")
     private Long userId;
 
-    @JsonProperty("user_name")
-    private String userName;
-
-    @JsonProperty("user_email")
-    private String userEmail;
-
-    @JsonProperty("recipient_id")
-    private Long recipientId;
-
-    @JsonProperty("recipient_name")
-    private String recipientName;
-
-    @JsonProperty("recipient_email")
-    private String recipientEmail;
-
-    @JsonProperty("is_read")
-    private Boolean isRead;
-
+    @Schema(description = "Creation timestamp of the message", example = "2023-10-01T12:00:00Z")
     @JsonProperty("created_at")
     private LocalDateTime createdAt;
 
+    @Schema(description = "Last update timestamp of the message", example = "2023-10-01T12:00:00Z")
     @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
 
@@ -58,32 +51,20 @@ public class MessageResponse {
         this.rentalId = messageEntity.getRental().getId();
         this.rentalName = messageEntity.getRental().getName();
         this.userId = messageEntity.getUser().getId();
-        this.userName = messageEntity.getUser().getName();
-        this.userEmail = messageEntity.getUser().getEmail();
-        this.recipientId = messageEntity.getRental().getOwner().getId();
-        this.recipientName = messageEntity.getRental().getOwner().getName();
-        this.recipientEmail = messageEntity.getRental().getOwner().getEmail();
-        this.isRead = messageEntity.isRead();
         this.createdAt = messageEntity.getCreatedAt();
         this.updatedAt = messageEntity.getUpdatedAt();
     }
 
     // Constructor with parameters
     public MessageResponse(Long id, String message, Long rentalId, String rentalName,
-                          Long userId, String userName, String userEmail,
-                          Long recipientId, String recipientName, String recipientEmail,
-                          Boolean isRead, LocalDateTime createdAt, LocalDateTime updatedAt) {
+            Long userId, String userName, String userEmail,
+            Long recipientId, String recipientName, String recipientEmail, LocalDateTime createdAt,
+            LocalDateTime updatedAt) {
         this.id = id;
         this.message = message;
         this.rentalId = rentalId;
         this.rentalName = rentalName;
         this.userId = userId;
-        this.userName = userName;
-        this.userEmail = userEmail;
-        this.recipientId = recipientId;
-        this.recipientName = recipientName;
-        this.recipientEmail = recipientEmail;
-        this.isRead = isRead;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -134,54 +115,6 @@ public class MessageResponse {
         this.userId = userId;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setuserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public void setuserEmail(String userEmail) {
-        this.userEmail = userEmail;
-    }
-
-    public Long getRecipientId() {
-        return recipientId;
-    }
-
-    public void setRecipientId(Long recipientId) {
-        this.recipientId = recipientId;
-    }
-
-    public String getRecipientName() {
-        return recipientName;
-    }
-
-    public void setRecipientName(String recipientName) {
-        this.recipientName = recipientName;
-    }
-
-    public String getRecipientEmail() {
-        return recipientEmail;
-    }
-
-    public void setRecipientEmail(String recipientEmail) {
-        this.recipientEmail = recipientEmail;
-    }
-
-    public Boolean getIsRead() {
-        return isRead;
-    }
-
-    public void setIsRead(Boolean isRead) {
-        this.isRead = isRead;
-    }
-
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -206,10 +139,6 @@ public class MessageResponse {
                 ", rentalId=" + rentalId +
                 ", rentalName='" + rentalName + '\'' +
                 ", userId=" + userId +
-                ", userName='" + userName + '\'' +
-                ", recipientId=" + recipientId +
-                ", recipientName='" + recipientName + '\'' +
-                ", isRead=" + isRead +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';

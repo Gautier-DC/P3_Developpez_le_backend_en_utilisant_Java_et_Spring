@@ -6,7 +6,6 @@ import com.openclassrooms.chatop.entity.User;
 import com.openclassrooms.chatop.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,10 +24,9 @@ public class LoginService {
     private final JwtService jwtService;
     private final UserRepository userRepository;
 
-    @Autowired
-    public LoginService(AuthenticationManager authenticationManager, 
-                       JwtService jwtService,
-                       UserRepository userRepository) {
+    public LoginService(AuthenticationManager authenticationManager,
+            JwtService jwtService,
+            UserRepository userRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
         this.userRepository = userRepository;
@@ -44,23 +42,21 @@ public class LoginService {
         try {
             // Authenticate user credentials
             Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                    request.getEmail(),
-                    request.getPassword()
-                )
-            );
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()));
 
             logger.info("Authentication successful for: {}", request.getEmail());
 
             // Find user in database for response (AFTER successful authentication)
             User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                    .orElseThrow(() -> new RuntimeException("User not found"));
 
             // Generate JWT token using email (not User object to avoid cast issues)
             String token = jwtService.generateToken(request.getEmail());
 
             logger.info("User logged in successfully: {}", request.getEmail());
-            
+
             // Use constructor that takes (String token, User user)
             return new AuthResponse(token, user);
 

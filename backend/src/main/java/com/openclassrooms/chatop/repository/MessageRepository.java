@@ -39,20 +39,4 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
      */
     boolean existsByUserAndRental(User user, Rental rental);
 
-    /**
-     * Count total messages sent by a user
-     */
-    long countByUser(User user);
-
-    /**
-     * Count total messages received by a user (as rental owner)
-     */
-    @Query("SELECT COUNT(m) FROM Message m WHERE m.rental.owner = :owner")
-    long countByRentalOwner(@Param("owner") User owner);
-
-    /**
-     * Count unread messages for a rental owner
-     */
-    @Query("SELECT COUNT(m) FROM Message m WHERE m.rental.owner = :owner AND m.isRead = false")
-    long countUnreadMessagesForOwner(@Param("owner") User owner);
 }

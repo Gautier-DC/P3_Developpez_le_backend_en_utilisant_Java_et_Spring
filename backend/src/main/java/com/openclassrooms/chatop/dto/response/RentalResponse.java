@@ -2,6 +2,9 @@ package com.openclassrooms.chatop.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.openclassrooms.chatop.entity.Rental;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -11,20 +14,33 @@ import java.time.LocalDateTime;
  */
 public class RentalResponse {
 
+    @Schema(description = "ID of the rental", example = "1")
     private Long id;
+
+    @Schema(description = "Name of the rental", example = "Cozy Apartment")
     private String name;
+
+    @Schema(description = "Surface of the rental", example = "150")
     private BigDecimal surface;
+
+    @Schema(description = "Price of the rental", example = "1200.00")
     private BigDecimal price;
+
+    @Schema(description = "Picture URL of the rental", example = "http://example.com/picture.jpg")
     private String picture;
+
+    @Schema(description = "Description of the rental", example = "A cozy apartment in the city center with all amenities.")
     private String description;
+
+    @Schema(description = "ID of the rental owner", example = "1")
     @JsonProperty("owner_id")
     private Long ownerId;
-    @JsonProperty("owner_name")
-    private String ownerName;
-    @JsonProperty("owner_email")
-    private String ownerEmail;
+
+    @Schema(description = "Creation date of the rental", example = "2023-01-01T12:00:00")
     @JsonProperty("created_at")
     private LocalDateTime createdAt;
+
+    @Schema(description = "Last update date of the rental", example = "2023-01-01T12:00:00")
     @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
 
@@ -41,16 +57,14 @@ public class RentalResponse {
         this.picture = rental.getPicture();
         this.description = rental.getDescription();
         this.ownerId = rental.getOwner().getId();
-        this.ownerName = rental.getOwner().getName();
-        this.ownerEmail = rental.getOwner().getEmail();
         this.createdAt = rental.getCreatedAt();
         this.updatedAt = rental.getUpdatedAt();
     }
 
     // Constructor with parameters
-    public RentalResponse(Long id, String name, BigDecimal surface, BigDecimal price, 
-                         String picture, String description, Long ownerId, String ownerName, 
-                         String ownerEmail, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public RentalResponse(Long id, String name, BigDecimal surface, BigDecimal price,
+            String picture, String description, Long ownerId, String ownerName,
+            String ownerEmail, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.name = name;
         this.surface = surface;
@@ -58,8 +72,6 @@ public class RentalResponse {
         this.picture = picture;
         this.description = description;
         this.ownerId = ownerId;
-        this.ownerName = ownerName;
-        this.ownerEmail = ownerEmail;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -126,22 +138,6 @@ public class RentalResponse {
         this.ownerId = ownerId;
     }
 
-    public String getOwnerName() {
-        return ownerName;
-    }
-
-    public void setOwnerName(String ownerName) {
-        this.ownerName = ownerName;
-    }
-
-    public String getOwnerEmail() {
-        return ownerEmail;
-    }
-
-    public void setOwnerEmail(String ownerEmail) {
-        this.ownerEmail = ownerEmail;
-    }
-
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -168,7 +164,6 @@ public class RentalResponse {
                 ", picture='" + picture + '\'' +
                 ", description='" + description + '\'' +
                 ", ownerId=" + ownerId +
-                ", ownerName='" + ownerName + '\'' +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
