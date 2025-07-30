@@ -84,7 +84,13 @@ public class RentalController {
                         "timestamp": "2025-01-15T10:30:00Z"
                     }
                     """))),
-            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(name = "Unauthorized", value = """
+                    {
+                        "message": "Internal server error",
+                        "code": "SERVER_500",
+                        "timestamp": "2025-01-15T10:30:00Z"
+                    }
+                    """))),
     })
     public ResponseEntity<List<RentalResponse>> getAllRentals() {
         logger.info("Request to get all rentals");
@@ -162,7 +168,7 @@ public class RentalController {
     @Operation(summary = "Create a new rental", description = "Create a new rental property with picture upload. Requires authentication.", tags = {
             "Rentals" }, security = @SecurityRequirement(name = "JWT"))
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Rental created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RentalResponse.class), examples = @ExampleObject(name = "Created Rental", value = """
+            @ApiResponse(responseCode = "200", description = "Rental created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RentalResponse.class), examples = @ExampleObject(name = "Created Rental", value = """
                     {
                         "id": 1,
                         "name": "Beautiful Apartment",
@@ -182,7 +188,13 @@ public class RentalController {
                         "timestamp": "2025-01-15T10:30:00Z"
                     }
                     """))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized - Invalid or missing JWT token", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "401", description = "Unauthorized - Invalid or missing JWT token", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(name = "Unauthorized", value = """
+                    {
+                        "message": "Unauthorized - Invalid token",
+                        "code": "AUTH_401",
+                        "timestamp": "2025-01-15T10:30:00Z"
+                    }
+                    """))),
     })
     public ResponseEntity<RentalResponse> createRental(@RequestParam("name") String name,
             @RequestParam("surface") BigDecimal surface,
@@ -229,8 +241,20 @@ public class RentalController {
             "Rentals" }, security = @SecurityRequirement(name = "JWT"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Rental updated successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RentalResponse.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid rental data", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized - Invalid or missing JWT token", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid rental data", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(name = "Invalid Data", value = """
+                    {
+                        "message": "Invalid rental data",
+                        "code": "REQUEST_400",
+                        "timestamp": "2025-01-15T10:30:00Z"
+                    }
+                    """))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized - Invalid or missing JWT token", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(name = "Unauthorized", value = """
+                    {
+                        "message": "Unauthorized - Invalid token",
+                        "code": "AUTH_401",
+                        "timestamp": "2025-01-15T10:30:00Z"
+                    }
+                    """))),
             @ApiResponse(responseCode = "403", description = "Forbidden - Not the owner of this rental", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(name = "Forbidden", value = """
                     {
                         "message": "Not authorized to update this rental",
@@ -238,7 +262,13 @@ public class RentalController {
                         "timestamp": "2025-01-15T10:30:00Z"
                     }
                     """))),
-            @ApiResponse(responseCode = "404", description = "Rental not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "404", description = "Rental not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(name = "Rental Not Found", value = """
+                    {
+                        "message": "Rental not found",
+                        "code": "ERROR_404",
+                        "timestamp": "2025-01-15T10:30:00Z"
+                    }
+                    """)))
     })
     public ResponseEntity<RentalResponse> updateRental(@PathVariable Long id,
             @RequestParam("name") String name,

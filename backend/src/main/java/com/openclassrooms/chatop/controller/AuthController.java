@@ -60,19 +60,12 @@ public class AuthController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User successfully registered and logged in", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AuthResponse.class), examples = @ExampleObject(name = "Successful Registration", value = """
                     {
-                        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-                        "user": {
-                            "id": 1,
-                            "email": "john@example.com",
-                            "name": "John Doe",
-                            "created_at": "2025-01-15T10:30:00",
-                            "updated_at": "2025-01-15T10:30:00"
-                        }
+                        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                     }
                     """))),
             @ApiResponse(responseCode = "400", description = "Invalid registration data or email already exists", content = @Content(mediaType = "application/json", examples = @ExampleObject(name = "Registration Error", value = """
                     {
-                        "error": "Email already exists"
+                        "error": "Invalid Data or email already exists"
                     }
                     """)))
     })
@@ -104,7 +97,7 @@ public class AuthController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Login successful, JWT token returned", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AuthResponse.class), examples = @ExampleObject(name = "Successful Login", value = """
                     {
-                        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                     }
                     """))),
             @ApiResponse(responseCode = "401", description = "Invalid credentials", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(name = "Login Error", value = """

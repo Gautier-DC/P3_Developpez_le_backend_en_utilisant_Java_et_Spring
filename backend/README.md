@@ -16,14 +16,14 @@ ChâTop is a real estate rental application that allows users to publish and bro
 
 ## Features
 
-- ✅ **JWT Authentication** (Register, Login)
-- ✅ **User Management** (User profiles)
-- ✅ **Rental CRUD** (Create, read, update rental listings)
-- ✅ **Image Upload** (Rental property photos)
-- ✅ **Messaging System** (User communication)
-- ✅ **API Documentation** (Swagger UI)
-- ✅ **Centralized Error Handling**
-- ✅ **Data Validation**
+- **JWT Authentication** (Register, Login)
+- **User Management** (User profiles)
+- **Rental CRUD** (Create, read, update rental listings)
+- **Image Upload** (Rental property photos)
+- **Messaging System** (User communication)
+- **API Documentation** (Swagger UI)
+- **Centralized Error Handling**
+- **Data Validation**
 
 ## Installation
 
@@ -45,10 +45,12 @@ ChâTop is a real estate rental application that allows users to publish and bro
 2. **Setup the database**
    ```sql
    cd database
-   CREATE DATABASE chatop;
-   CREATE USER 'chatop_user'@'localhost' IDENTIFIED BY 'password';
-   GRANT ALL PRIVILEGES ON chatop.* TO 'chatop_user'@'localhost';
+   mysql -u root -p
+   CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';
+   GRANT ALL PRIVILEGES ON *.* TO 'chatop_user'@'localhost';
    FLUSH PRIVILEGES;
+   CREATE DATABASE chatop_db;
+   USE chatop_db;
    ```
 
 3. **Configure application.properties**
@@ -115,12 +117,6 @@ src/main/java/com/openclassrooms/chatop/
 - **Rental**: Rental property listings
 - **Message**: Messages between users
 
-### Relationships
-
-- `User` ↔ `Rental` (1:N) - A user can have multiple rentals
-- `User` ↔ `Message` (1:N) - A user can send multiple messages
-- `Rental` ↔ `Message` (1:N) - A rental can have multiple messages
-
 ## Security
 
 - **JWT** for stateless authentication
@@ -150,7 +146,7 @@ The API returns JSON formatted errors with specific codes:
 - `UPLOAD_413` - File too large
 - `SERVER_500` - Internal server error
 
-## 🔧 Environment Configuration
+## Environment Configuration
 
 ### Development
 ```properties

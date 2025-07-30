@@ -4,9 +4,15 @@
 - MySQL installed and running
 
 ## Setup
-1. Cd database
-2. Create database: `CREATE DATABASE chatop_db;`
-3. Run script: `mysql -u root -p chatop_db`
+```sql
+cd database
+mysql -u root -p
+CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON *.* TO 'chatop_user'@'localhost';
+FLUSH PRIVILEGES;
+CREATE DATABASE chatop_db;
+USE chatop_db;
+```
 
 ## Reset database (if needed)
 ```bash

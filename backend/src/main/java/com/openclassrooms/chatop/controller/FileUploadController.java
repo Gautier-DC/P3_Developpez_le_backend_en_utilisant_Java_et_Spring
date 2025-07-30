@@ -36,7 +36,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/upload")
 @CrossOrigin(origins = "*", maxAge = 3600)
-@Tag(name = "File Upload", description = "File upload management endpoints")
+@Tag(name = "Files", description = "File upload management endpoints")
 public class FileUploadController {
 
     private static final Logger logger = LoggerFactory.getLogger(FileUploadController.class);
@@ -53,7 +53,7 @@ public class FileUploadController {
      */
     @PostMapping("/image")
     @Operation(summary = "Upload an image file", description = "Upload an image file for rental properties. Supports JPEG, PNG, GIF, and WebP formats.", tags = {
-            "File Upload" }, security = @SecurityRequirement(name = "JWT"))
+            "Files" }, security = @SecurityRequirement(name = "JWT"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Image uploaded successfully", content = @Content(mediaType = "application/json", examples = @ExampleObject(name = "Upload Success", value = """
                     {
