@@ -70,6 +70,8 @@ ChâTop is a real estate rental application that allows users to publish and bro
    spring.servlet.multipart.max-request-size=10MB
    ```
 
+   My advice, is to create a .env file directly in backend folder with all the "touchy" informations with the already define variables, since you have the spring-dotev dependency installed.
+
 4. **Install dependencies and run**
    ```bash
    mvn clean install
