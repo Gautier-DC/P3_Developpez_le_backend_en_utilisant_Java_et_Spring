@@ -154,6 +154,7 @@ public class User implements UserDetails {
                 ", email='" + email + '\'' +
                 ", name='" + name + '\'' +
                 ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
                 '}';
     }
 
